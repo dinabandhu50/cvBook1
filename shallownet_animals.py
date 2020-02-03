@@ -12,20 +12,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 
-# # construct the argument parser and parse the arguments
-# ap = argparse.ArgumentParser()
-# ap.add_argument("-d", "--dataset", required=True,
-#                 help="path to input dataset")
-# args = vars(ap.parse_args())
+EPOCHS = 10
 
-# # grab the list of images that we’ll be describing
-# print("[INFO] loading images...")
-# imagePaths = list(paths.list_images(args["dataset"]))
-imagePaths = list(paths.list_images("./data/animals"))
+# construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-d", "--dataset", required=True,
+                help="path to input dataset")
+args = vars(ap.parse_args())
 
-# imagePaths = "./data/animals"
-print(imagePaths[0])
-print(len(imagePaths))
+# grab the list of images that we’ll be describing
+print("[INFO] loading images...")
+imagePaths = list(paths.list_images(args["dataset"]))
+# imagePaths = list(paths.list_images("./data/animals"))
 
 # initialize the image preprocessors
 sp = SimplePreprocessor(32, 32)
@@ -56,7 +54,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 # train the network
 print("[INFO] training network...")
 H = model.fit(trainX, trainY, validation_data=(testX, testY),
-              batch_size=32, epochs=10, verbose=1)
+              batch_size=32, epochs=EPOCHS, verbose=1)
 
 # evaluate the network
 print("[INFO] evaluating network...")
@@ -68,10 +66,10 @@ print(classification_report(testY.argmax(axis=1),
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
-plt.plot(np.arange(0, 100), H.history["loss"], label="train_loss")
-plt.plot(np.arange(0, 100), H.history["val_loss"], label="val_loss")
-plt.plot(np.arange(0, 100), H.history["acc"], label="train_acc")
-plt.plot(np.arange(0, 100), H.history["val_acc"], label="val_acc")
+plt.plot(np.arange(0, EPOCHS), H.history["loss"], label="train_loss")
+plt.plot(np.arange(0, EPOCHS), H.history["val_loss"], label="val_loss")
+plt.plot(np.arange(0, EPOCHS), H.history["acc"], label="train_acc")
+plt.plot(np.arange(0, EPOCHS), H.history["val_acc"], label="val_acc")
 plt.title("Training Loss and Accuracy")
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
