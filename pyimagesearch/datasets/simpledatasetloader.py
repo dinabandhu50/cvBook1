@@ -19,12 +19,12 @@ class SimpleDatasetLoader:
             image = cv2.imread(imagePath)
             label = imagePath.split(os.path.sep)[-2]
 
-        if self.preprocessors is not None:
-            for p in self.preprocessors:
-                image = p.preprocessors(image)
+            if self.preprocessors is not None:
+                for p in self.preprocessors:
+                    image = p.preprocess(image)
 
-        data.append(image)
-        labels.append(label)
+            data.append(image)
+            labels.append(label)
         if verbose > 0 and i > 0 and (i + 1) % verbose == 0:
             print(f"[INFO] processed {i+1} / {len(imagePaths)}")
 
